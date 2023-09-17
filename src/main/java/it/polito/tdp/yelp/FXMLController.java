@@ -5,8 +5,10 @@
 package it.polito.tdp.yelp;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
+import it.polito.tdp.yelp.model.Business;
 import it.polito.tdp.yelp.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -35,13 +37,13 @@ public class FXMLController {
     private Button btnPercorso; // Value injected by FXMLLoader
 
     @FXML // fx:id="cmbCitta"
-    private ComboBox<?> cmbCitta; // Value injected by FXMLLoader
+    private ComboBox<String> cmbCitta; // Value injected by FXMLLoader
 
     @FXML // fx:id="txtX"
     private TextField txtX; // Value injected by FXMLLoader
 
     @FXML // fx:id="cmbAnno"
-    private ComboBox<?> cmbAnno; // Value injected by FXMLLoader
+    private ComboBox<Integer> cmbAnno; // Value injected by FXMLLoader
 
     @FXML // fx:id="cmbLocale"
     private ComboBox<?> cmbLocale; // Value injected by FXMLLoader
@@ -56,12 +58,21 @@ public class FXMLController {
 
     @FXML
     void doCreaGrafo(ActionEvent event) {
-
+    	int anno = this.cmbAnno.getValue();
+    	String citta = this.cmbCitta.getValue();
+    	this.model.creaGrafo(citta, anno);
+    	
+    	List<Business> vertici = this.model.getVertici(citta, anno);
+    	this.txtResult.setText("GRAFO CREATO\n#vertici: " + vertici.size() + "\n#archi: " + this.model.nArchi());
     }
 
     @FXML
     void doLocaleMigliore(ActionEvent event) {
-
+    	txtResult.clear();
+    	
+    	Business best = this.model.getBilancio() ;
+    	
+    	txtResult.appendText("LOCALE MIGLIORE: "+best.getBusinessName()+"\n");
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
@@ -78,5 +89,15 @@ public class FXMLController {
     
     public void setModel(Model model) {
     	this.model = model;
+    	this.cmbAnno.getItems().add(2005);
+    	this.cmbAnno.getItems().add(2006);
+    	this.cmbAnno.getItems().add(2007);
+    	this.cmbAnno.getItems().add(2008);
+    	this.cmbAnno.getItems().add(2009);
+    	this.cmbAnno.getItems().add(2010);
+    	this.cmbAnno.getItems().add(2011);
+    	this.cmbAnno.getItems().add(2012);
+    	this.cmbAnno.getItems().add(2013);
+    	this.cmbCitta.getItems().addAll(this.model.getCitta());
     }
 }
